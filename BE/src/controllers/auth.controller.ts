@@ -15,7 +15,10 @@ import { validateLogin, validateRegister } from "../validators/auth.validator";
 
 const register = asyncWrapper(async (req: Request, res: Response) => {
    const validatedData = validateRegister(req.body) as RegisterData;
-   const { user, tokens } = await authRegister(validatedData);
+   const { user, tokens } = await authRegister({
+      data: validatedData,
+      avatar: req.file?.filename,
+   });
 
    setTokenCookies(res, tokens);
 

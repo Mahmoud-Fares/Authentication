@@ -25,7 +25,13 @@ export type AuthResponse = {
    tokens: TokenPair;
 };
 
-export const register = async (data: RegisterData): Promise<AuthResponse> => {
+export const register = async ({
+   data,
+   avatar,
+}: {
+   data: RegisterData;
+   avatar?: string;
+}): Promise<AuthResponse> => {
    const existingUser = await User.findOne({ email: data.email });
    if (existingUser)
       throw customError.create("Email already registered", 409, "CONFLICT");
@@ -35,6 +41,7 @@ export const register = async (data: RegisterData): Promise<AuthResponse> => {
    const newUser = await User.create({
       ...data,
       password: hashedPassword,
+      avatar,
    });
 
    const tokenPayload: TokenPayload = {

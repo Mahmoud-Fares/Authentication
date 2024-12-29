@@ -4,6 +4,7 @@ export type IUser = Document & {
    name: string;
    email: string;
    password: string;
+   avatar: string;
    createdAt: Date;
 };
 
@@ -20,6 +21,10 @@ const userSchema = new Schema<IUser>({
    password: {
       type: String,
       required: true,
+   },
+   avatar: {
+      type: String,
+      default: "default-male-profile.jpg",
    },
    createdAt: {
       type: Date,
