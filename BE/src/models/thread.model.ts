@@ -1,13 +1,14 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
 
-export type IThread = Document & {
-   userId: Types.ObjectId;
+export type Thread = Document & {
+   id: string;
+   authorId: Types.ObjectId;
    caption: string;
    createdAt: Date;
 };
 
-const threadSchema = new Schema<IThread>({
-   userId: {
+const threadSchema = new Schema<Thread>({
+   authorId: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -22,6 +23,6 @@ const threadSchema = new Schema<IThread>({
    },
 });
 
-const ThreadModel = mongoose.model<IThread>("Thread", threadSchema);
+const ThreadModel = mongoose.model<Thread>("Thread", threadSchema);
 
 export default ThreadModel;
