@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express, { Express, Request, Response } from "express";
+import path from "path";
 
 import errorHandler from "./middleware/errorHandler";
 import authRoutes from "./routes/auth.route";
@@ -25,6 +26,8 @@ app.use(cookieParser());
 // Routes
 app.use("/auth", authRoutes);
 app.use("/api", routes);
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Handle 404 for all non-existing routes
 app.all("*", (_: Request, res: Response): void => {

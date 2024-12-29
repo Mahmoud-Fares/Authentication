@@ -4,3 +4,6 @@ backend.rar
 .vercel
 .env*.local
 dist 
+
+# uploads folder
+src/uploads
