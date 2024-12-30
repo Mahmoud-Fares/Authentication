@@ -5,6 +5,7 @@ export type Thread = Document & {
    authorId: Types.ObjectId;
    caption: string;
    createdAt: Date;
+   images?: string[];
 };
 
 const threadSchema = new Schema<Thread>({
@@ -21,6 +22,7 @@ const threadSchema = new Schema<Thread>({
       type: Date,
       default: Date.now,
    },
+   images: [{ type: String }],
 });
 
 const ThreadModel = mongoose.model<Thread>("Thread", threadSchema);

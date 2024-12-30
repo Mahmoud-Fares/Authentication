@@ -12,9 +12,14 @@ const createThreadController = asyncWrapper(
       // Since auth middleware guarantees currentUserPayload exists
       const { userId } = req.currentUserPayload!;
 
+      const imageUrls = req.files
+         ? (req.files as Express.Multer.File[]).map((file) => file.path)
+         : [];
+
       const thread = await createThread({
-         userId: new Types.ObjectId(userId),
+         authorId: new Types.ObjectId(userId),
          caption,
+         images: imageUrls,
       });
 
       return apiResponse.success({

@@ -6,6 +6,7 @@ import customError from "../utils/customError";
 export type CreateThreadData = {
    authorId: Types.ObjectId;
    caption: string;
+   images?: string[];
 };
 
 export const createThread = async (data: CreateThreadData): Promise<Thread> => {
