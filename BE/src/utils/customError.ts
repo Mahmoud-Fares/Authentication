@@ -4,6 +4,7 @@ type ErrorStatus =
    | "UNAUTHORIZED"
    | "CONFLICT"
    | "BAD_REQUEST"
+   | "FORBIDDEN"
    | "NOT_FOUND";
 
 class CustomError extends Error {

@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import User from "../models/user.model";
+import { deleteUser } from "../services/user.service";
+import { AuthRequest } from "../types/auth.types";
 import { apiResponse } from "../utils/apiResponse";
 import { asyncWrapper } from "../utils/asyncWrapper";
+import customError from "../utils/customError";
 
 type QueryParams = {
    limit?: string;
@@ -30,6 +33,27 @@ const getUsers = asyncWrapper(
    }
 );
 
+const deleteUserById = asyncWrapper(async (req: AuthRequest, res: Response) => {
+   const { id } = req.params;
+   const { userId } = req.currentUserPayload!;
+
+   // Check if user is deleting their own account
+   if (id !== userId)
+      throw customError.create(
+         "You can only delete your own account",
+         403,
+         "FORBIDDEN"
+      );
+
+   await deleteUser(id);
+
+   return apiResponse.success({
+      message: "User deleted successfully",
+      res,
+   });
+});
+
 export default {
    getUsers,
+   deleteUserById,
 };
