@@ -17,7 +17,7 @@ const register = asyncWrapper(async (req: Request, res: Response) => {
    const validatedData = validateRegister(req.body) as RegisterData;
    const { user, tokens } = await authRegister({
       data: validatedData,
-      avatar: req.file?.filename,
+      avatar: req.file?.path, // coming from cloudinary
    });
 
    setTokenCookies(res, tokens);

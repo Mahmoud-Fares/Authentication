@@ -1,24 +1,15 @@
 import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { Request } from "express";
+import cloudinary from "./cloudinary.config";
 import customError from "../utils/customError";
 
-const diskStorage = multer.diskStorage({
-   destination: function (
-      _req: Request,
-      _file: Express.Multer.File,
-      cb: (error: Error | null, destination: string) => void
-   ) {
-      cb(null, "src/uploads");
-   },
-   filename: function (
-      _req: Request,
-      file: Express.Multer.File,
-      cb: (error: Error | null, filename: string) => void
-   ) {
-      const ext = file.mimetype.split("/")[1];
-      const fileName = `img-${Date.now()}.${ext}`;
-      cb(null, fileName);
-   },
+const storage = new CloudinaryStorage({
+   cloudinary: cloudinary,
+   params: {
+      folder: "threads-app",
+      transformation: [{ quality: "auto", fetch_format: "auto" }],
+   } as any,
 });
 
 const fileFilter = (
@@ -36,6 +27,6 @@ const fileFilter = (
 };
 
 export const upload = multer({
-   storage: diskStorage,
-   fileFilter: fileFilter,
+   storage,
+   fileFilter,
 });

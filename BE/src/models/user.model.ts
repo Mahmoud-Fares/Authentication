@@ -24,7 +24,7 @@ const userSchema = new Schema<IUser>({
    },
    avatar: {
       type: String,
-      default: "default-male-profile.jpg",
+      default: process.env.DEFAULT_AVATAR_MALE,
    },
    createdAt: {
       type: Date,
