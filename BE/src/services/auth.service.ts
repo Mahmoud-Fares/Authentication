@@ -69,6 +69,15 @@ export const login = async (data: LoginData): Promise<AuthResponse> => {
    if (!user)
       throw customError.create("Invalid credentials", 401, "UNAUTHORIZED");
 
+   // Check if user is Google OAuth user
+   // Todo: we may need to redirect to Google OAuth login page
+   if (user.googleId && !user.password)
+      throw customError.create("Please login with Google", 400, "BAD_REQUEST");
+
+   // Todo:if we implemented the redirect, remove this check either
+   if (!user.password)
+      throw customError.create("Invalid credentials", 401, "UNAUTHORIZED");
+
    const isPasswordValid = await verifyPassword(data.password, user.password);
    if (!isPasswordValid)
       throw customError.create("Invalid credentials", 401, "UNAUTHORIZED");

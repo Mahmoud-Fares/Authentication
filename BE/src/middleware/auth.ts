@@ -8,10 +8,13 @@ export const auth = (
    _res: Response,
    next: NextFunction
 ): void => {
-   const accessToken = req.cookies.accessToken;
+   // First check if user is authenticated via OAuth session
+   if (req.isAuthenticated()) return next();
 
+   // If not OAuth, verify JWT token
+   const accessToken = req.cookies.accessToken;
    if (!accessToken)
-      throw customError.create("token is required", 401, "ERROR");
+      throw customError.create("Authentication required", 401, "UNAUTHORIZED");
 
    try {
       const currentUserPayload = verifyToken(
@@ -22,6 +25,6 @@ export const auth = (
       req.currentUserPayload = currentUserPayload;
       next();
    } catch (err) {
-      throw customError.create("invalid token", 401, "ERROR");
+      throw customError.create("Invalid authentication", 401, "UNAUTHORIZED");
    }
 };

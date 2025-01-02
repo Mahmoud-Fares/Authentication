@@ -43,6 +43,15 @@ const login = asyncWrapper(async (req: Request, res: Response) => {
 });
 
 const refresh = asyncWrapper(async (req: AuthRequest, res: Response) => {
+   // If OAuth session is active, no need to refresh
+   if (req.isAuthenticated()) {
+      return apiResponse.success({
+         message: "Session is valid",
+         res,
+      });
+   }
+
+   // Handle JWT refresh
    const refreshToken = req.cookies.refreshToken;
    if (!refreshToken)
       throw customError.create("No refresh token", 401, "UNAUTHORIZED");
@@ -56,8 +65,14 @@ const refresh = asyncWrapper(async (req: AuthRequest, res: Response) => {
    });
 });
 
-const logout = asyncWrapper(async (_req: Request, res: Response) => {
+const logout = asyncWrapper(async (req: Request, res: Response) => {
+   // Clear JWT tokens
    clearTokenCookies(res);
+
+   // Clear OAuth session if exists
+   if (req.logout) {
+      req.logout(() => {});
+   }
 
    return apiResponse.success({
       message: "User logged out successfully",

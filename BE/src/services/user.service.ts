@@ -10,3 +10,12 @@ export const deleteUser = async (userId: string) => {
 
    await User.findByIdAndDelete(userId);
 };
+
+export const createGoogleUser = async (profile: any) => {
+   return await User.create({
+      email: profile.emails[0].value,
+      name: profile.displayName,
+      avatar: profile.photos[0].value,
+      googleId: profile.id,
+   });
+};

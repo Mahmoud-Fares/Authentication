@@ -3,9 +3,10 @@ import mongoose, { Document, Schema } from "mongoose";
 export type IUser = Document & {
    name: string;
    email: string;
-   password: string;
+   password?: string;
    avatar: string;
    createdAt: Date;
+   googleId?: string;
 };
 
 const userSchema = new Schema<IUser>({
@@ -20,7 +21,9 @@ const userSchema = new Schema<IUser>({
    },
    password: {
       type: String,
-      required: true,
+      required: function () {
+         return !this.googleId; // Password only required if not Google auth
+      },
    },
    avatar: {
       type: String,
@@ -29,6 +32,9 @@ const userSchema = new Schema<IUser>({
    createdAt: {
       type: Date,
       default: Date.now,
+   },
+   googleId: {
+      type: String,
    },
 });
 
