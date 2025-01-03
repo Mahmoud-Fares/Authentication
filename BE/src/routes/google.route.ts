@@ -7,32 +7,27 @@ const router = Router();
 
 // Google OAuth routes
 router.get(
-   "/google",
+   "/",
    passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
 router.get(
-   "/google/callback",
+   "/callback",
    passport.authenticate("google", { session: false }),
    (async (req: OAuthRequest, res: Response) => {
-      try {
-         const user = req.user;
-         if (!user) throw new Error("Authentication failed");
+      const user = req.user;
 
-         const tokens = generateTokenPair({
-            userId: user._id!.toString(),
-            email: user.email,
-         });
+      if (!user) throw new Error("Authentication failed");
 
-         setTokenCookies(res, tokens);
+      const tokens = generateTokenPair({
+         userId: user._id!.toString(),
+         email: user.email,
+      });
 
-         // Redirect to frontend
-         res.redirect(process.env.FRONTEND_URL_NEXT + "/");
-      } catch (error) {
-         res.redirect(
-            process.env.FRONTEND_URL_NEXT + "/login?error=auth_failed"
-         );
-      }
+      setTokenCookies(res, tokens);
+
+      // Redirect to frontend
+      res.redirect(process.env.FRONTEND_URL_NEXT + "/");
    }) as RequestHandler
 );
 

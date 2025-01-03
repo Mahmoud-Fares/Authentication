@@ -4,7 +4,7 @@ import {
    Profile,
    VerifyCallback,
 } from "passport-google-oauth20";
-import User, { IUser } from "../models/user.model";
+import User from "../models/user.model";
 import { createGoogleUser } from "../services/user.service";
 
 passport.use(
@@ -34,25 +34,6 @@ passport.use(
          }
       }
    )
-);
-
-// Serialize user for the session
-passport.serializeUser(
-   (user: Express.User, done: (err: any, id?: unknown) => void) => {
-      done(null, (user as any)._id);
-   }
-);
-
-// Deserialize user from the session
-passport.deserializeUser(
-   async (id: string, done: (err: any, user?: IUser | null) => void) => {
-      try {
-         const user = await User.findById(id);
-         done(null, user);
-      } catch (error) {
-         done(error, null);
-      }
-   }
 );
 
 export default passport;

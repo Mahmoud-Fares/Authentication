@@ -2,8 +2,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express, { Express, Request, Response } from "express";
-import session from "express-session";
-import { AUTH_CONFIG } from "./config/auth.config";
 import passport from "./config/passport";
 import errorHandler from "./middleware/errorHandler";
 import routes from "./routes/index";
@@ -23,23 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-// Session middleware only for OAuth routes
-app.use(
-   "/api/auth/google",
-   session({
-      secret: process.env.SESSION_SECRET!,
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-         ...AUTH_CONFIG.COOKIE_OPTIONS,
-         maxAge: 60 * 1000, // 1 minute - just enough for OAuth flow
-      },
-   })
-);
-
 // Initialize passport
 app.use(passport.initialize());
-app.use("/api/auth/google", passport.session());
 
 // Routes
 app.use("/api", routes);
