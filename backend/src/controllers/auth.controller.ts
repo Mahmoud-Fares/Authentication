@@ -5,6 +5,7 @@ import {
    register as authRegister,
    LoginData,
    RegisterData,
+   me as authMe,
 } from "../services/auth.service";
 import { clearTokenCookies, setTokenCookies } from "../services/token.service";
 import { AuthRequest } from "../types/auth.types";
@@ -66,9 +67,21 @@ const logout = asyncWrapper(async (_req: Request, res: Response) => {
    });
 });
 
+const me = asyncWrapper(async (req: AuthRequest, res: Response) => {
+   const { userId } = req.currentUserPayload!;
+   const user = await authMe(userId);
+
+   return apiResponse.success({
+      data: { user },
+      message: "User profile retrieved",
+      res,
+   });
+});
+
 export default {
    register,
    login,
    refresh,
    logout,
+   me,
 };

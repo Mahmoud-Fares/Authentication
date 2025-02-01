@@ -1,5 +1,6 @@
 "use client";
 
+import SessionProvider from "@/lib/providers/SessionProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -28,7 +29,7 @@ export function Providers({ children }: ThemeProviderProps) {
             defaultTheme="system"
             enableSystem
          >
-            {children}
+            <SessionProvider>{children}</SessionProvider>
          </NextThemesProvider>
          <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

@@ -9,7 +9,8 @@ router
    .route("/signup")
    .post(uploadAvatar.single("avatar"), authController.register);
 router.route("/login").post(authController.login);
-router.route("/refresh").get(auth, authController.refresh);
+router.route("/refresh").get(authController.refresh);
 router.route("/logout").get(authController.logout);
+router.route("/me").get(auth, authController.me);
 
 export default router;

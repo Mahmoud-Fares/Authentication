@@ -7,6 +7,7 @@ import errorHandler from "./middleware/errorHandler";
 import routes from "./routes/index";
 import { apiResponse } from "./utils/apiResponse";
 import { connectToDb } from "./utils/dbConnect";
+import { auth } from "./middleware/auth";
 
 const app: Express = express();
 
@@ -24,6 +25,14 @@ app.use(cookieParser());
 // Initialize passport
 app.use(passport.initialize());
 
+// testing Routes
+app.get("/api/public", (_req, res) => {
+   res.json({ message: "This is a public endpoint" });
+});
+
+app.get("/api/protected", auth, (_req, res) => {
+   res.json({ message: "This is a protected endpoint" });
+});
 // Routes
 app.use("/api", routes);
 

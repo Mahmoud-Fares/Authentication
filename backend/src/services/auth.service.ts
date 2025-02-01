@@ -111,3 +111,8 @@ export const refresh = async (
 
    return { tokens };
 };
+
+export const me = async (userId: string) => {
+   const user = await User.findById(userId).select("-password");
+   return user;
+};
