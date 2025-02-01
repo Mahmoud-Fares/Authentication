@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth";
+import { auth } from "@/auth";
 import ClientComponent from "./client-component";
 import { api } from "@/lib/api-client";
 
@@ -19,12 +19,13 @@ export default async function Test() {
 }
 
 async function ServerTest() {
-   const session = await getServerSession();
+   const session = await auth();
    console.log("server session", session);
 
    return (
       <div className="flex flex-col gap-2 items-center justify-center">
          <h2>Server Component test</h2>
+         <p>Welcome {session?.user?.id || "no user"}</p>
          <p>Welcome {session?.user?.name || "no user"}</p>
          <p>Your email is: {session?.user?.email || "no mail"}</p>
       </div>

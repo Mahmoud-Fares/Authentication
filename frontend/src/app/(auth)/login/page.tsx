@@ -48,7 +48,7 @@ export default function LoginPage() {
          </div>
 
          <div className="flex gap-2 items-center justify-center">
-            <Button onClick={() => signIn("google")}>
+            <Button onClick={() => signIn("google", { callbackUrl: "/" })}>
                Sign in with Google
             </Button>
          </div>

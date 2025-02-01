@@ -1,10 +1,9 @@
-import { NextAuthOptions, User } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import { apiPost } from "@/lib/api-client";
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 
-export const authOptions: NextAuthOptions = {
+export const { auth, handlers, signIn, signOut } = NextAuth({
    providers: [
       CredentialsProvider({
          name: "Credentials",
@@ -24,10 +23,7 @@ export const authOptions: NextAuthOptions = {
             }
          },
       }),
-      GoogleProvider({
-         clientId: process.env.GOOGLE_CLIENT_ID!,
-         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      }),
+      Google,
    ],
    callbacks: {
       async jwt({ token, user }) {
@@ -45,9 +41,6 @@ export const authOptions: NextAuthOptions = {
    pages: {
       signIn: "/login",
    },
-   secret: process.env.NEXTAUTH_SECRET,
+   secret: process.env.AUTH_SECRET,
    debug: process.env.NODE_ENV !== "production",
-};
-
-// For server-side authentication
-export const auth = NextAuth(authOptions);
+});
