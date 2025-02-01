@@ -101,6 +101,7 @@ export const refresh = async (
 ): Promise<{ tokens: TokenPair }> => {
    const payload = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET!);
 
+   console.log("old refresh token:", refreshToken);
    const user = await User.findById(payload.userId).select("-password");
    if (!user) throw customError.create("User not found", 404, "NOT_FOUND");
 
@@ -109,5 +110,12 @@ export const refresh = async (
       email: payload.email,
    });
 
+   console.log("new tokens:", tokens);
+
    return { tokens };
+};
+
+export const me = async (userId: string) => {
+   const user = await User.findById(userId).select("-password");
+   return user;
 };

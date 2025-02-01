@@ -7,8 +7,8 @@ type AuthConfig = {
 };
 
 export const AUTH_CONFIG: AuthConfig = {
-   ACCESS_TOKEN_EXPIRY: "15m",
-   REFRESH_TOKEN_EXPIRY: "7d",
+   ACCESS_TOKEN_EXPIRY: ".1m",
+   REFRESH_TOKEN_EXPIRY: ".5m",
    COOKIE_OPTIONS: {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
