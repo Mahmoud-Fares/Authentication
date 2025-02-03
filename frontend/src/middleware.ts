@@ -4,43 +4,31 @@ import { auth } from "./auth";
 export default async function middleware(request: NextRequest) {
    const pathname = request.nextUrl.pathname;
 
-   const { isAccessTokenExpired, isRefreshTokenExpired, refreshTheTokens } =
-      await auth();
+   const { isAuthorized, cookiesToSet } = await auth();
 
    // Auth routes
    const authRoutes = ["/login", "/register"];
    if (authRoutes.includes(pathname)) {
-      if (!isRefreshTokenExpired)
-         return NextResponse.redirect(new URL("/", request.url));
-
-      return NextResponse.next();
+      return isAuthorized
+         ? NextResponse.redirect(new URL("/", request.url))
+         : NextResponse.next();
    }
 
    // Public routes
-   const publicRoutes = ["/", "/client"];
+   const publicRoutes = ["/", "/client", "/protected"];
    if (publicRoutes.includes(pathname)) return NextResponse.next();
 
    // Protected routes
-   if (isRefreshTokenExpired && pathname !== "/login")
-      return NextResponse.redirect(new URL("/login", request.url));
+   const response = isAuthorized
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL("/login", request.url));
 
-   // When access token is expired and refresh token is valid, refresh the tokens
-   if (!isRefreshTokenExpired && isAccessTokenExpired) {
-      try {
-         const newCookies = await refreshTheTokens();
-         const response = NextResponse.next();
+   // Apply cookies to the response
+   cookiesToSet.forEach((cookie) => {
+      response.headers.append("Set-Cookie", cookie);
+   });
 
-         newCookies.forEach((cookie) => {
-            response.headers.append("Set-Cookie", cookie);
-         });
-
-         return response;
-      } catch (error) {
-         return NextResponse.redirect(new URL("/login", request.url));
-      }
-   }
-
-   return NextResponse.next();
+   return response;
 }
 
 export const config = {

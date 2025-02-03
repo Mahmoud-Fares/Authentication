@@ -67,6 +67,13 @@ export default function LoginPage() {
             <ClientPageButton />
          </div>
 
+         <div className="flex gap-2 items-center justify-center">
+            <Button onClick={() => redirect("/protected")}>
+               Protected page
+            </Button>
+            <Button onClick={() => redirect("/test")}>Test page</Button>
+         </div>
+
          <br />
          <br />
 

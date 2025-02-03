@@ -16,4 +16,9 @@ export const deleteAuthCookies = async () => {
 
    cookieStore.delete("accessToken");
    cookieStore.delete("refreshToken");
+
+   return [
+      "accessToken=; Path=/; Max-Age=0",
+      "refreshToken=; Path=/; Max-Age=0",
+   ];
 };
