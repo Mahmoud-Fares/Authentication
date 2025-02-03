@@ -11,13 +11,13 @@ type TokenPair = {
 export const generateAccessToken = (payload: TokenPayload): string => {
    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: AUTH_CONFIG.ACCESS_TOKEN_EXPIRY,
-   });
+   } as jwt.SignOptions);
 };
 
 export const generateRefreshToken = (payload: TokenPayload): string => {
    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET!, {
       expiresIn: AUTH_CONFIG.REFRESH_TOKEN_EXPIRY,
-   });
+   } as jwt.SignOptions);
 };
 
 export const generateTokenPair = (payload: TokenPayload): TokenPair => {
