@@ -3,7 +3,7 @@ import { OAuthRequest } from "types/auth.types";
 import passport from "../config/passport";
 import { generateTokenPair, setTokenCookies } from "../services/token.service";
 
-const router = Router();
+const router: Router = Router();
 
 // Google OAuth routes
 router.get(
